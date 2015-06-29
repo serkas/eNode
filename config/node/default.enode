@@ -1,0 +1,21 @@
+{
+    "rf": {
+        "frequency": 868,
+        "bandwidth": 2,
+
+        "transmitter" : {
+            "power" : 0
+        },
+
+        "receiver" : {
+            "noise" : -90
+        },
+
+        "antenna": {
+            "type": "omni",
+            "gain": 6
+        }
+    }
+
+
+}

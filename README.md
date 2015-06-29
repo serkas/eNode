@@ -1,2 +1,2 @@
 # eNode
-WSN simulation system with energy consumption estimation
+WSN simulation system for energy consumption estimation
