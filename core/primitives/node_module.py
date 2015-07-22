@@ -1,6 +1,7 @@
 __author__ = 'serhii'
 
-from primitives.primitive import *
+from core.primitives.primitive import Primitive
+
 
 class NodeModule(Primitive):
 

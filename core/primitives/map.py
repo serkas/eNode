@@ -1,6 +1,6 @@
 __author__ = 'serhii'
 
-from primitives.primitive import *
+from core.primitives.primitive import Primitive
 
 class Map(Primitive):
 
@@ -21,6 +21,8 @@ class Map(Primitive):
             self.node_names.add(name)
             return True
 
+    def get_nodes(self):
+        return self.nodes
 
     def list_nodes(self):
         self.log("List of nodes on map:")

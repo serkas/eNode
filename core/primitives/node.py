@@ -1,7 +1,9 @@
 __author__ = 'serhii'
 
-from utils.position import *
-from primitives.rf_module import *
+from core.primitives.primitive import Primitive
+from core.primitives.rf_module import RfModule
+from core.utils.position import Position
+
 
 class Node(Primitive):
     p_type = "node"
@@ -11,10 +13,10 @@ class Node(Primitive):
     position = None
     rf = None
 
-    def __init__(self):
+    def __init__(self, id=0):
 
         self.apply_config(self.get_config(self.p_type, self.name))
-
+        self.id = id
         self.rf = RfModule()
         self.rf.set_core(self)
 

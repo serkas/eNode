@@ -1,17 +1,6 @@
+__author__ = 'Serhii Kashuba kashubasv@gmail.com'
 
-from primitives.node import *
-from primitives.map import *
-
-def main():
-
-
-    mapDemo = Map()
-
-    mapDemo.add_node(Node())
-
-    mapDemo.list_nodes()
-
+from panel.main import run
 
 if __name__ == "__main__":
-    main()
-
+    run()

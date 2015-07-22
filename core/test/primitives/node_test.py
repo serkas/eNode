@@ -3,9 +3,8 @@ __author__ = 'Serhii Kashuba kashubasv@gmail.com'
 
 import unittest
 
-from primitives.map import *
-from primitives.node import *
-
+from core.primitives.map import *
+from core.primitives.node import *
 
 class NodeTest(unittest.TestCase):
     def setUp(self):
