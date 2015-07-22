@@ -1,7 +1,6 @@
 __author__ = 'serhii'
 
-from primitives.primitive import *
-from primitives.position import *
+from utils.position import *
 from primitives.rf_module import *
 
 class Node(Primitive):
@@ -30,6 +29,11 @@ class Node(Primitive):
     def get_name(self):
         return "%s_%d" % (self.name, self.id)
 
+    def set_position(self, x, y, z=0):
+        self.position.set_position(x, y, z)
 
     def get_position(self):
         return self.position.get_position()
+
+    def distance_to(self, node_b):
+        return self.position.distance_to(node_b.position)

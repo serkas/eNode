@@ -8,7 +8,6 @@ class Map(Primitive):
     node_names = set()
 
 
-
     def __init__(self):
         pass
 
@@ -29,3 +28,6 @@ class Map(Primitive):
         for i, node in enumerate(self.nodes):
             self.log( "%d. %s" % (i, node.get_name()))
 
+
+    def get_nodes_count(self):
+        return len(self.nodes)
