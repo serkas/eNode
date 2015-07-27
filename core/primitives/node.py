@@ -3,7 +3,7 @@ __author__ = 'serhii'
 from core.primitives.primitive import Primitive
 from core.primitives.rf_module import RfModule
 from core.utils.position import Position
-
+from core.primitives.message import Message
 
 class Node(Primitive):
     p_type = "node"
@@ -39,3 +39,7 @@ class Node(Primitive):
 
     def distance_to(self, node_b):
         return self.position.distance_to(node_b.position)
+
+    def accept(self, message):
+        if message.type_of(Message.TIME):
+            self.log("get time")

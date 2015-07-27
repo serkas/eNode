@@ -13,6 +13,6 @@ def demo_map():
 
     mapDemo.add_node(node2)
 
-    print mapDemo
+    #print mapDemo
     return mapDemo
 
