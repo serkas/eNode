@@ -2,45 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>{{title}}</title>
+    <style>
+        .container {
+            border: 1px solid black;
+            height: 400px;
+            width: 400px;
+        }
+        .plot{
+            /*display: inline-block; */
+            margin: 10px 40px;
+        }
+    </style>
 </head>
 
-{{title}}
+
+<div class="containers">
+    <div class="plot">
+        <div class="title">X - Z</div>
+        <div id="container_xz"  style="height: 100px;" class="container"></div>
+    </div>
+
+    <div class="plot">
+        <div class="title">X - Y</div>
+        <div id="container_xy" class="container"></div>
+    </div>
+
+
+
+</div>
+
+
 
 {% for node in nodes %}
     <p> Node: {{ node.get_name() }} {{node.get_position()}} </p>
 {% endfor %}
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/highcharts-more.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-<div id="container" style="height: 400px; min-width: 310px; max-width: 600px; margin: 0 auto"></div>
+
+<script src="/static/svg.js"></script>
 
 <script>
+    var node_size = {x:6, y: 6, z: 10};
+    var uav_size = {x:16, y: 16, z: 5};
+    var dimentions = {x: 400,  y: 400, z: 100};
 
-    var plot_data = {{plot_data}};
+    var uavs = {{uavs_data | safe}};
+    var nodes ={{nodes_data | safe}};
 
-    $(function () {
-    $('#container').highcharts({
+    var dynamicData = {{dynamic_data | safe}};
 
-        chart: {
-            type: 'bubble',
-            zoomType: 'xy'
-        },
+    var draw_xy = SVG('container_xy').size(dimentions.x, dimentions.y);
+    var draw_xz = SVG('container_xz').size(dimentions.x, dimentions.z);
 
-        title: {
-            text: 'Highcharts Bubbles'
-        },
 
-        series: [{
-            data: plot_data
+    // GRID
+    var gridStep = 100;
+    var gridScale = 5;
+    drawGridXY(draw_xy, dimentions, gridStep);
+    drawGridXY(draw_xz, dimentions, gridStep);
+
+    // NODES
+    for(var nid = 0; nid < nodes.length; nid++){
+        var node = nodes[nid];
+        var nodePosition = node['position'];
+        //console.log(node.snr);
+
+        var node_xy = draw_xy.rect(node_size.x, node_size.y).attr({ fill: '#44f' });
+        node_xy.animate().move(nodePosition[0]/gridScale - node_size.x/2, nodePosition[1]/gridScale - node_size.y/2);
+
+        var node_xz = draw_xz.rect(node_size.x, node_size.z).attr({ fill: '#44f' });
+        node_xz.animate().move(nodePosition[0]/gridScale - node_size.x/2, dimentions.z - node_size.z - nodePosition[2]/gridScale);
+    }
+
+    // UAVs
+    for(var uid = 0; uid < uavs.length; uid++){
+        var uavPosition  = uavs[uid]['position'];
+
+        var uav_xy = draw_xy.rect(15, 15).attr({ fill: '#f44' });
+        uav_xy.animate().move(-uav_size.x/2,  -uav_size.y/2);
+
+        var uav_xz = draw_xz.rect(uav_size.x, uav_size.z).attr({ fill: '#f44' });
+        uav_xz.animate().move(uavPosition[0]/gridScale - uav_size.x/2,  dimentions.z - uav_size.z - uavPosition[2]/gridScale);
+
+    }
+
+    var oldUavPos = [0, 0, 0];
+
+    var p_index = 0;
+    function timeLoop() {
+        setTimeout(function () {
+            var gs = gridScale;
+            var timePoint = dynamicData[p_index];
+            var uavPos = timePoint.position;
+            // move UAV
+            uav_xy.animate().move(uavPos[0]/gs - uav_size.x/2, uavPos[1]/gs - uav_size.y/2);
+
+            draw_xy.line(oldUavPos[0]/gs, oldUavPos[1]/gs, uavPos[0]/gs, uavPos[1]/gs).stroke({ width: 1, color: '#faa' });
+            // update previous position
+            oldUavPos = uavPos;
+
+            p_index++;
+            if (p_index < dynamicData.length) {
+                timeLoop();
+            }
+        }, 1000)
+    }
+
+    timeLoop();
+
+    //var line = draw_xz.line(0, dimentions.z - 45, dimentions.x, dimentions.z - 45).stroke({ width: 1 })
+
+
+//rect.animate({ ease: '<', delay: 1500 }).attr({ fill: '#f03' });
+
+    function drawGridXY(container, dimentions, step){
+
+        for(var x = 0; x < dimentions.x; x += step){
+             container.line(x, 0, x, dimentions.y).stroke({ width: 1, color: '#ccc'});
         }
-       ]
-    });
-});
+
+        for(var y = 0; y < dimentions.y; y += step){
+             container.line(0, y, dimentions.x, y).stroke({ width: 1, color: '#ccc' });
+        }
+    }
 
 </script>
+
+
 </body>
 </html>
