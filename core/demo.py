@@ -13,7 +13,7 @@ def demo_map():
         3: (45, 87, 0),
     }
 
-    nodes = generate_nodes_data(20, 2000, 2000)
+    nodes = generate_nodes_data(50, 2000, 2000)
 
     for nid in nodes:
         position =  nodes[nid]

@@ -35,7 +35,9 @@ def map():
         (700, 1000)
     ]
 
+
     nodes = map.get_nodes()
+    """
     for node in nodes:
         #(x, y, z) = node.get_position()
         node_info = dict()
@@ -44,10 +46,23 @@ def map():
         node_info['snr'] =  rf.attenuation(f, uav.distance_to(node), rf.DB)
 
         nodes_data.append(node_info)
+    """
 
     dynamic_data = []
+    # time dynamic data
     for (x, y) in uav_path:
-        dynamic_data.append({'position': (x,y,uav_altitude)})
+        nodes_state = []
+        uav.set_position(x, y, uav_altitude)
+
+        for node in nodes:
+            node_info = dict()
+            node_info['id'] = node.get_name()
+            node_info['position'] = node.get_position()
+            node_info['snr'] =  rf.attenuation(f, uav.distance_to(node), rf.DB)
+            nodes_state.append(node_info)
+
+        state = {'position': (x,y,uav_altitude), 'nodes': nodes_state}
+        dynamic_data.append(state)
 
     uav_data = {'id': "uav", 'position': uav.get_position()}
     uavs_data = [uav_data]
