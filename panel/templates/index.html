@@ -55,14 +55,15 @@
     var dynamicData = {{dynamic_data | safe}};
 
     var draw_xy = SVG('container_xy').size(dimentions.x, dimentions.y);
-    //var draw_xz = SVG('container_xz').size(dimentions.x, dimentions.z);
+
 
 
     // GRID
     var gridStep = 100;
     var gridScale = 5;
     drawGridXY(draw_xy, dimentions, gridStep);
-    //drawGridXY(draw_xz, dimentions, gridStep);
+
+    var radioRange = 200;
 
     // NODES
     function renderNodes(nodes){
@@ -80,8 +81,9 @@
             var node_xy = draw_xy.rect(node_size.x, node_size.y).attr({ fill: nodeColor });
             node_xy.move(nodePosition[0]/gridScale - node_size.x/2, nodePosition[1]/gridScale - node_size.y/2);
 
-            //var node_xz = draw_xz.rect(node_size.x, node_size.z).attr({ fill: '#44f' });
-            //node_xz.animate().move(nodePosition[0]/gridScale - node_size.x/2, dimentions.z - node_size.z - nodePosition[2]/gridScale);
+            var area_xy = draw_xy.circle(2 * radioRange/gridScale).attr({ fill: "rgba(0,255,0,0.05)" });
+            area_xy.move((nodePosition[0] - radioRange)/gridScale, (nodePosition[1] - radioRange)/gridScale)
+
         }
     }
 
@@ -93,12 +95,12 @@
         var uav_xy = draw_xy.rect(15, 15).attr({ fill: '#f44' });
         uav_xy.animate().move(-uav_size.x/2,  -uav_size.y/2);
 
-        //var uav_xz = draw_xz.rect(uav_size.x, uav_size.z).attr({ fill: '#f44' });
-        //uav_xz.animate().move(uavPosition[0]/gridScale - uav_size.x/2,  dimentions.z - uav_size.z - uavPosition[2]/gridScale);
 
     }
 
     var oldUavPos = [0, 0, 0];
+
+    var turnPointSize = 12;
 
     var p_index = 0;
     function timeLoop() {
@@ -108,6 +110,9 @@
             var uavPos = timePoint.position;
             // draw trace
             draw_xy.line(oldUavPos[0]/gs, oldUavPos[1]/gs, uavPos[0]/gs, uavPos[1]/gs).stroke({ width: 1, color: '#faa' });
+            // draw turning point
+            var uavTurn = draw_xy.circle(turnPointSize).attr({ fill: 'rgba(0,0,0,0)' }).stroke({width: 1, color: '#00f'});
+            uavTurn.move(uavPos[0]/gs - turnPointSize/2, uavPos[1]/gs - turnPointSize/2 );
             // move UAV
             uav_xy.animate().move(uavPos[0]/gs - uav_size.x/2, uavPos[1]/gs - uav_size.y/2);
             // update previous position
@@ -126,10 +131,7 @@
 
     timeLoop();
 
-    //var line = draw_xz.line(0, dimentions.z - 45, dimentions.x, dimentions.z - 45).stroke({ width: 1 })
 
-
-//rect.animate({ ease: '<', delay: 1500 }).attr({ fill: '#f03' });
 
     function drawGridXY(container, dimentions, step){
 

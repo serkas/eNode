@@ -42,7 +42,9 @@ class Node(Primitive):
     def set_position(self, x, y, z=0):
         self.position.set_position(x, y, z)
 
-    def get_position(self):
+    def get_position(self, return_obj=False):
+        if return_obj:
+            return self.position
         return self.position.get_position()
 
     def distance_to(self, node_b):

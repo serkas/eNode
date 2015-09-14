@@ -7,7 +7,9 @@ from flask import render_template
 from core.demo import demo_map
 from core.primitives.node import Node
 from core.utils.rf_model import rfModel
+from core.utils.nn_path_planner import NNPathPlanner
 
+from core.utils import position
 app = Flask(__name__)
 
 def run():
@@ -26,31 +28,26 @@ def map():
     rf = rfModel()
 
     uav_altitude = 200
-    uav_path = [
-        (0, 0),
-        (200, 200),
-        (400, 400),
-        (500, 700),
-        (600, 950),
-        (700, 1000)
-    ]
-
+    uav_start = position.Position(0, 0, uav_altitude)
 
     nodes = map.get_nodes()
-    """
+    to_visit = []
     for node in nodes:
-        #(x, y, z) = node.get_position()
-        node_info = dict()
-        node_info['id'] = node.get_name()
-        node_info['position'] = node.get_position()
-        node_info['snr'] =  rf.attenuation(f, uav.distance_to(node), rf.DB)
+        to_visit.append(node.get_position(True))
 
-        nodes_data.append(node_info)
-    """
+    planner = NNPathPlanner()
+
+
+    uav_path = planner.compute_path(uav_start, to_visit)
+
+    uav_path = planner.reduce_path(200)
+
+
+
 
     dynamic_data = []
     # time dynamic data
-    for (x, y) in uav_path:
+    for (x, y, z) in [p.get_position() for p in uav_path]:
         nodes_state = []
         uav.set_position(x, y, uav_altitude)
 
@@ -61,7 +58,7 @@ def map():
             node_info['snr'] =  rf.attenuation(f, uav.distance_to(node), rf.DB)
             nodes_state.append(node_info)
 
-        state = {'position': (x,y,uav_altitude), 'nodes': nodes_state}
+        state = {'position': (x, y, uav_altitude), 'nodes': nodes_state}
         dynamic_data.append(state)
 
     uav_data = {'id': "uav", 'position': uav.get_position()}

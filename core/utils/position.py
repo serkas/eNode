@@ -9,6 +9,11 @@ class Position():
 
     rotation = 0
 
+    def __init__(self, x=0, y=0, z=0):
+        self.x = x
+        self.y = y
+        self.z = z
+
     def get_position(self):
         return (self.x, self.y, self.z)
 
@@ -30,4 +35,9 @@ class Position():
 
     def distance_to(self, pos_b):
         return math.hypot(self.planar_distance_to(pos_b), self.z - pos_b.z)
+
+
+    def clone(self):
+
+        return Position(self.x, self.y, self.z)
 
