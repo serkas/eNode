@@ -40,9 +40,11 @@ def map():
 
     uav_path = planner.compute_path(uav_start, to_visit)
 
-    uav_path = planner.reduce_path(200)
+    uav_path = planner.reduce_path(200, 1)
 
+    #uav_path_2 = planner.reduce_path(200, 2)
 
+    #uav_path.extend(uav_path_2)
 
 
     dynamic_data = []

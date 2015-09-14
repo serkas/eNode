@@ -45,3 +45,56 @@ class Position():
         self.x += d_x
         self.y += d_y
         self.z += d_z
+
+
+    def azimuth(self, b, deg=True):
+        distance = self.planar_distance_to(b)
+
+
+        if distance <= 0:
+            raise Exception('Zero distance in azimuth computation')
+
+        d_x = b.x - self.x
+        d_y = b.y - self.y
+
+        rad = abs(math.asin(d_x/distance))
+
+        adapted = 0
+        if d_x < 0:
+            if d_y < 0:
+                adapted = 2*math.pi - rad
+            else:
+                adapted = math.pi + rad
+
+        else:
+            if d_y > 0:
+                adapted = math.pi - rad
+            else:
+                adapted = rad
+
+        #print rad
+        if deg:
+            return adapted * 180 / math.pi
+
+        return adapted
+
+
+
+
+
+
+if __name__ == "__main__":
+    eps = 2
+    a = Position(0, 0)
+    b = Position(0, 40)
+
+    test = [
+        (0, -10, 0),
+        (10, -100, 6),
+        (0, 40, 180),
+        (20, 20, 135),
+
+    ]
+    for (x,y, estimate) in test:
+        #print a.azimuth(Position(x, y))
+        assert abs(a.azimuth(Position(x, y)) - estimate) < eps

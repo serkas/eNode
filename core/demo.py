@@ -8,12 +8,14 @@ def demo_map():
     mapDemo = Map()
 
     nodes = {
-        1: (12, 45, 0),
-        2: (23, 21, 0),
-        3: (45, 87, 0),
+        1: (100, 45, 0),
+        2: (596, 1220, 0),
+        3: (453, 754, 0),
+        4: (933, 1231, 0),
+        5: (123, 533, 0)
     }
 
-    nodes = generate_nodes_data(5, 2000, 2000)
+    #nodes = generate_nodes_data(5, 2000, 2000)
 
     for nid in nodes:
         position =  nodes[nid]
