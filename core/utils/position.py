@@ -41,3 +41,7 @@ class Position():
 
         return Position(self.x, self.y, self.z)
 
+    def move(self, d_x, d_y, d_z=0):
+        self.x += d_x
+        self.y += d_y
+        self.z += d_z
