@@ -1,6 +1,8 @@
 __author__ = 'Serhii Kashuba kashubasv@gmail.com'
 
+import core.utils.exceptions
 
+from core.utils.exceptions import *
 
 def line_intersection(a, b, c, d):
     """
@@ -10,9 +12,11 @@ def line_intersection(a, b, c, d):
     :param b:
     :param c:
     :param d:
-    :return:
+    :return: tuple (x, y)
     """
 
+    if(a.planar_distance_to(b) <= 0):
+        raise GeometryException('Impossible to build line by one point')
     # y = k_1*x + b_1
 
     d_x_1 = b.get('x') - a.get('x')
