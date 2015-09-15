@@ -60,7 +60,7 @@ class BisectPathReducer(PathReducer):
 
 
         #print c.azimuth(b)
-        print optimal_line_direction, c.get_position()
+        #print optimal_line_direction, c.get_position()
         #print '='*20
         return best_position
 

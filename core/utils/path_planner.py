@@ -33,6 +33,7 @@ class PathPlanner:
 
 
     def reduce_path(self, radio_distance, iterations):
+        self.reduced_path = []
 
         reducer = bisect_path_reducer.BisectPathReducer()
 
@@ -63,6 +64,13 @@ class PathPlanner:
 
         return self.reduced_path
 
+    def path_length(self, path):
+        length = 0
+        for i, point in enumerate(path):
+            if i > 0:
+                length += point.planar_distance_to(path[i-1])
+
+        return length
 
 
 

@@ -21,6 +21,9 @@ def map():
     map = demo_map()
 
     nodes_data = []
+    report = []
+
+    traces = []
 
     uav = Node("uav", 400, 400, 150)
 
@@ -39,13 +42,13 @@ def map():
 
 
     uav_path = planner.compute_path(uav_start, to_visit)
-
-    #uav_path = planner.reduce_path(200, 1)
+    report.append({'label': "Nodes path", 'value': planner.path_length(uav_path)})
+    traces.append(uav_path)
 
     uav_path = planner.reduce_path(200, 5)
-
+    report.append({'label': "Reduced path", 'value': planner.path_length(uav_path)})
     #uav_path.extend(uav_path_2)
-
+    traces.append(uav_path)
 
     dynamic_data = []
     # time dynamic data
@@ -66,12 +69,18 @@ def map():
     uav_data = {'id': "uav", 'position': uav.get_position()}
     uavs_data = [uav_data]
 
+    serial_traces = []
+    for path in traces:
+        serial_traces.append([p.get_position() for p in path])
+
     params = {
         "title": "main",
         "nodes": nodes,
+        "report": report,
         "nodes_data": json.dumps(nodes_data),
         "uavs_data": json.dumps(uavs_data),
         "dynamic_data": json.dumps(dynamic_data),
+        "traces": json.dumps(serial_traces),
 
     }
     return render_template("index.html", **params)

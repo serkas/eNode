@@ -42,11 +42,15 @@
 </div>
 
 
-
+{% for line in report %}
+    <p> {{ line['label'] }} {{ line['value']}} </p>
+{% endfor %}
+<hr>
+<!--
 {% for node in nodes %}
     <p> Node: {{ node.get_name() }} {{node.get_position()}} </p>
 {% endfor %}
-
+-->
 
 
 <script src="/static/svg.js"></script>
@@ -60,6 +64,7 @@
     var nodes ={{nodes_data | safe}};
 
     var dynamicData = {{dynamic_data | safe}};
+    var traces = {{traces | safe}};
 
     var draw_xy = SVG('container_xy').size(dimentions.x, dimentions.y);
 
@@ -83,8 +88,8 @@
 
             var signalLevel = node['snr'];
 
-            var nodeColor = levelToColor(signalLevel, 35, 50, rampColors());
-
+            //var nodeColor = levelToColor(signalLevel, 35, 50, rampColors());
+            var nodeColor = '#ff2222';
             var node_xy = draw_xy.rect(node_size.x, node_size.y).attr({ fill: nodeColor });
             node_xy.move(nodePosition[0]/gridScale - node_size.x/2, nodePosition[1]/gridScale - node_size.y/2);
 
@@ -105,6 +110,24 @@
 
     }
 
+    var gs = gridScale;
+    var traceColors = ['#f99', '#f2f', '#99f'];
+    // Traces
+    for(var t=0; t < traces.length; t++){
+        var trace = traces[t];
+        var tColor = traceColors[t % traceColors.length];
+
+        for(var p=0; p < trace.length - 1; p++){
+            // draw trace
+            var point = trace[p];
+            var next = trace[p+1];
+            draw_xy.line(point[0]/gs, point[1]/gs, next[0]/gs, next[1]/gs).stroke(
+                    { width: 2, color: tColor }
+            );
+        }
+    }
+
+
     var oldUavPos = [0, 0, 0];
 
     var turnPointSize = 12;
@@ -115,8 +138,7 @@
             var gs = gridScale;
             var timePoint = dynamicData[p_index];
             var uavPos = timePoint.position;
-            // draw trace
-            draw_xy.line(oldUavPos[0]/gs, oldUavPos[1]/gs, uavPos[0]/gs, uavPos[1]/gs).stroke({ width: 1, color: '#faa' });
+
             // draw turning point
             var uavTurn = draw_xy.circle(turnPointSize).attr({ fill: 'rgba(0,0,0,0)' }).stroke({width: 1, color: '#00f'});
             uavTurn.move(uavPos[0]/gs - turnPointSize/2, uavPos[1]/gs - turnPointSize/2 );

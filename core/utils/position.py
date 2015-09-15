@@ -94,8 +94,6 @@ class Position():
 
 
 
-
-
 if __name__ == "__main__":
     eps = 2
     a = Position(0, 0)
