@@ -3,6 +3,9 @@ __author__ = 'Serhii Kashuba kashubasv@gmail.com'
 import math
 
 from core.utils import position
+
+
+
 class PathReducer:
 
     def move_in_range(self, a, b, c, r):

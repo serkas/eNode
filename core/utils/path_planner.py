@@ -3,6 +3,8 @@ __author__ = 'Serhii Kashuba kashubasv@gmail.com'
 import math
 
 from core.utils import path_reducer
+from core.utils import bisect_path_reducer
+
 from core.utils import position
 
 class PathPlanner:
@@ -32,7 +34,7 @@ class PathPlanner:
 
     def reduce_path(self, radio_distance, iterations):
 
-        reducer = path_reducer.PathReducer()
+        reducer = bisect_path_reducer.BisectPathReducer()
 
         move_limit = 10000
 

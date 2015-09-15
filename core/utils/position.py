@@ -17,6 +17,17 @@ class Position():
     def get_position(self):
         return (self.x, self.y, self.z)
 
+    def get(self, coord):
+
+        assert coord in ['x', 'y', 'z'], "Try to get undefined coordinate"
+
+        if coord == "x":
+            return self.x
+        elif coord == "y":
+            return self.y
+        elif coord == "z":
+            return self.z
+        return None
 
     def set_position(self, x_axe, y_axe, z_axe=0):
         self.x = x_axe
@@ -46,8 +57,10 @@ class Position():
         self.y += d_y
         self.z += d_z
 
+        return self
 
-    def azimuth(self, b, deg=True):
+
+    def azimuth(self, b, deg=False):
         distance = self.planar_distance_to(b)
 
 
