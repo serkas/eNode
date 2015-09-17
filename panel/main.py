@@ -4,8 +4,9 @@ import json
 from flask import Flask
 from flask import render_template
 
-from core.demo import demo_map
+from core.demo import demo_map, generate_nodes_data
 from core.primitives.node import Node
+from core.utils.position import Position
 from core.utils.rf_model import rfModel
 from core.utils.nn_path_planner import NNPathPlanner
 
@@ -15,6 +16,7 @@ app = Flask(__name__)
 def run():
     app.run(debug=True)
 
+R = 50
 
 @app.route("/")
 def map():
@@ -45,7 +47,7 @@ def map():
     report.append({'label': "Nodes path", 'value': planner.path_length(uav_path)})
     traces.append(uav_path)
 
-    uav_path = planner.reduce_path(200, 5)
+    uav_path = planner.reduce_path(R, 5)
     report.append({'label': "Reduced path", 'value': planner.path_length(uav_path)})
     #uav_path.extend(uav_path_2)
     traces.append(uav_path)
@@ -85,6 +87,51 @@ def map():
     }
     return render_template("index.html", **params)
 
+
+@app.route("/path")
+def path():
+
+    report = []
+
+    traces = []
+
+    uav_altitude = 200
+    uav_start = position.Position(0, 0, uav_altitude)
+
+    init_paths = []
+    opt_paths = []
+
+    repeats = 1000
+    report.append({'label': "Repeats", 'value': repeats})
+    for i in range(repeats):
+        nodes = generate_nodes_data(10, 2000, 2000)
+        to_visit = []
+        for node_id in nodes:
+            to_visit.append(Position(*nodes[node_id]))
+
+        planner = NNPathPlanner()
+
+        uav_path = planner.compute_path(uav_start, to_visit)
+        init_paths.append(planner.path_length(uav_path))
+
+        uav_path_opt = planner.reduce_path(R, 5)
+        opt_paths.append(planner.path_length(uav_path_opt))
+
+    avg_init = sum(init_paths)/len(init_paths)
+    avg_opt = sum(opt_paths)/len(opt_paths)
+    reduction = (avg_init - avg_opt) / avg_init
+
+    report.append({'label': "Init", 'value': avg_init})
+    report.append({'label': "Reduced", 'value': avg_opt})
+
+    report.append({'label': "Reduction", 'value': reduction})
+
+    params = {
+        "title": "main",
+        "nodes": nodes,
+        "report": report,
+    }
+    return render_template("path.html", **params)
 
 if __name__ == "__main__":
     run()

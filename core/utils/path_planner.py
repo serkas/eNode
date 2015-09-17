@@ -27,10 +27,8 @@ class PathPlanner:
         for i, node in enumerate(to_visit):
             self.nodes[i] = node
 
-
     def compute_path(self, start, to_visit):
         return [start, (200, 200)]
-
 
     def reduce_path(self, radio_distance, iterations):
         self.reduced_path = []
@@ -54,7 +52,7 @@ class PathPlanner:
                         prev = self.reduced_path[index-1]
                         next = self.reduced_path[index+1]
 
-                    new = reducer.move_in_range(prev, next, p, 200)
+                    new = reducer.move_in_range(prev, next, p, radio_distance)
 
                     if i == 0:
                         self.reduced_path.append(new)

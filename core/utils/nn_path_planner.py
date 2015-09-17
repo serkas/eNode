@@ -11,8 +11,6 @@ class NNPathPlanner(PathPlanner):
     Simple and coarse heuristic solution for Travelling Salesmen Problem
     """
 
-
-
     def compute_distances(self, start):
         # init matrix
         n = len(self.nodes)
@@ -34,7 +32,6 @@ class NNPathPlanner(PathPlanner):
             dist = node_a.planar_distance_to(start)
             self.start_distances[i] = dist
 
-
     def get_closest(self, distances, exclude=set()):
         candidate = -1
         curr_distance = float('inf')
@@ -47,8 +44,6 @@ class NNPathPlanner(PathPlanner):
                 curr_distance = distance
 
         return candidate
-
-
 
     def compute_path(self, start, to_visit):
         
@@ -74,6 +69,5 @@ class NNPathPlanner(PathPlanner):
             visited.add(self.position)
             self.path.append(self.nodes[self.position])
 
-
-        return  self.path
+        return self.path
 

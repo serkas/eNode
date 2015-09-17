@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<table >
+    <tr>
+        {% for line in report %}
+            <td>{{ line['label'] }} </td>
+        {% endfor %}
+    </tr>
+    <tr>
+         {% for line in report %}
+            <td>{{ line['value']}}</td>
+        {% endfor %}
+
+    </tr>
+</table>
+
+<hr>
+</body>
+</html>
