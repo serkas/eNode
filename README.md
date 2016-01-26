@@ -1,9 +1,17 @@
 # eNode
-WSN simulation system
+
+WSN (Wireless Sensor Network) simulation framework
+
+Implementation of simulation for paper http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=7346621&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D7346621
 
 ## Run demo
 
-In root directory 
+Uses flask http://flask.pocoo.org/ microframework for GUI, so you need to setup it
+```
+pip install Flask
+```
+
+After that, in root directory 
 ```
 python main.py
 ```
